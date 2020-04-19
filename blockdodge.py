@@ -1,6 +1,6 @@
 # BlockDodge
 # Based off of Sentex's Youtube tutorial: https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ
-# Version 0.2
+# Version 0.3
 
 import pygame
 import time
@@ -69,6 +69,7 @@ def game_loop():
     y = (display_height * 0.8)
 
     x_change = 0
+    y_change = 0
 
     thing_startx = random.randrange(0, display_width)
     thing_starty = -600
@@ -100,12 +101,20 @@ def game_loop():
                     x_change = -5
                 elif event.key == pygame.K_RIGHT:
                     x_change = 5
+                elif event.key == pygame.K_UP:
+                    y_change = -5
+                elif event.key == pygame.K_DOWN:
+                    y_change = 5
+
+
 
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:  # Makes sure that when you stop pressing the button, the car stops moving
                     x_change = 0
+                    y_change = 0
 
         x += x_change
+        y += y_change
         gameDisplay.fill(white)  # Makes background white
 
         things(thing_startx, thing_starty, thing_width, thing_height, block_color)
