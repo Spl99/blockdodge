@@ -1,6 +1,10 @@
 # BlockDodge
 # Based off of Sentex's Youtube tutorial: https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ
-# Version 0.3
+# Version 0.4
+
+# Known bugs:
+# Crossing x axes when moving up causes a crash
+# Can't keep counting up when touching red box
 
 import pygame
 import time
@@ -25,6 +29,12 @@ clock = pygame.time.Clock()  # Game clock
 
 
 carImg = pygame.image.load('car.png')  # needs to be in the same folder as the .py
+
+
+def friends_caught(count):
+    font = pygame.font.SysFont(None, 25)
+    text = font.render("Caught" + str(count), True, black)
+    gameDisplay.blit(text, (0, 30))
 
 
 def things_dodged(count): # Sets up the scoring system
@@ -84,7 +94,7 @@ def game_loop():
     friendly_speed = 3
     friendly_width = 50
     friendly_height = 50
-    friendly_count = 1
+    caught = 0
 
 
     gameExit = False  # Racing game, start the game as NOT crashed
@@ -109,7 +119,7 @@ def game_loop():
 
 
             if event.type == pygame.KEYUP:
-                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:  # Makes sure that when you stop pressing the button, the car stops moving
+                if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT or event.key == pygame.K_UP or event.key == pygame.K_DOWN:  # Makes sure that when you stop pressing the button, the car stops moving
                     x_change = 0
                     y_change = 0
 
@@ -121,6 +131,7 @@ def game_loop():
         thing_starty += thing_speed # adds 7 to the thing each time so it lowers each time
         car(x, y)  # Makes the car
         things_dodged(dodged)
+        friends_caught(caught)
 
         things_friendly(friendly_startx, friendly_starty, friendly_width, friendly_height, red)  # Makes red box drop down - friendly box
         friendly_starty += friendly_speed
@@ -142,6 +153,7 @@ def game_loop():
             friendly_startx = random.randrange(0, display_width)
 
 
+
 # The below basically makes it so that whatever part of the car touches the box, you crash.
 
         if y < thing_starty + thing_height:
@@ -150,6 +162,13 @@ def game_loop():
             if x > thing_startx and x < thing_startx + thing_width or x + car_width > thing_startx and x + car_width < thing_startx + thing_width:
                 print('x crossover')
                 crash()
+
+        if y < friendly_starty + friendly_height:
+            print ("y friend")
+
+            if x > friendly_startx and x < friendly_startx + friendly_width or x + car_width > friendly_startx and x + car_width < friendly_startx + friendly_width:
+                print ("x friend")
+                caught = 1  # Only adds 1 point, never continues to grow it
 
         pygame.display.update()  # Shows the above on the screen
         clock.tick(60)  # Frames per second
