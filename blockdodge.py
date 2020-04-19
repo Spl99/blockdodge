@@ -1,8 +1,13 @@
+# BlockDodge
+# Based off of Sentex's Youtube tutorial: https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ
+# Version 0.2
+
 import pygame
 import time
 import random
 
 pygame.init()
+
 
 display_width = 800
 display_height = 600
@@ -10,8 +15,7 @@ display_height = 600
 black = (0, 0, 0)
 white = (255, 255, 255)
 red = (255, 0, 0)
-block_color = (53,114,255)
-
+block_color = (53, 114, 255)
 car_width = 102
 
 
@@ -31,6 +35,9 @@ def things_dodged(count): # Sets up the scoring system
 
 def things(thingx, thingy, thingw, thingh, color):  # Makes the block that comes down that the player needs to avoid
     pygame.draw.rect(gameDisplay, color, [thingx, thingy, thingw, thingh])
+
+def things_friendly(friendlyx, friendlyy, friendlyw, friendlyh, color):  # Makes the block that comes down that the player should catch
+    pygame.draw.rect(gameDisplay, color, [friendlyx, friendlyy, friendlyw, friendlyh])
 
 
 def car(x, y):
@@ -71,6 +78,14 @@ def game_loop():
     thing_count = 1
     dodged = 0
 
+    friendly_startx = random.randrange(0, display_width)
+    friendly_starty = -600
+    friendly_speed = 3
+    friendly_width = 50
+    friendly_height = 50
+    friendly_count = 1
+
+
     gameExit = False  # Racing game, start the game as NOT crashed
 
     while not gameExit:
@@ -98,6 +113,9 @@ def game_loop():
         car(x, y)  # Makes the car
         things_dodged(dodged)
 
+        things_friendly(friendly_startx, friendly_starty, friendly_width, friendly_height, red)  # Makes red box drop down - friendly box
+        friendly_starty += friendly_speed
+
         if x > display_width - car_width or x < 0:  # Exits game at width border using the edge of the car
             crash()
             gameExit = True
@@ -109,6 +127,11 @@ def game_loop():
             thing_speed +=1  # increases speed of block each turn
             thing_width += (dodged * 1.2)  # increases the block width each turn
             thing_count += 1
+
+        if friendly_starty > display_height:
+            friendly_starty = 0 - friendly_height
+            friendly_startx = random.randrange(0, display_width)
+
 
 # The below basically makes it so that whatever part of the car touches the box, you crash.
 
