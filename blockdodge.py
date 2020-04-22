@@ -1,6 +1,6 @@
 # BlockDodge
 # Based off of Sentex's Youtube tutorial: https://www.youtube.com/channel/UCfzlCWGWYyIQ0aLC5w48gBQ
-# Version 0.5
+# Version 0.55
 
 # Known bugs:
 # Crossing x axes when moving up causes a crash
@@ -23,7 +23,7 @@ bright_red = (255,0,0)
 bright_green = (0,255,0)
 block_color = (53, 114, 255)
 green = (0,200,0)
-car_width = 102
+car_width = 42
 
 
 gameDisplay = pygame.display.set_mode((display_width, display_height))  # Sets height and width
@@ -31,7 +31,7 @@ pygame.display.set_caption('Racing')  # title
 clock = pygame.time.Clock()  # Game clock
 
 
-carImg = pygame.image.load('car.png')  # needs to be in the same folder as the .py
+carImg = pygame.image.load('player.png')  # needs to be in the same folder as the .py
 
 
 def friends_caught(count):
